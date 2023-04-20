@@ -1,3 +1,9 @@
+import { TokenComponents } from './types'
+
+export const uint8ArrayToBase64 = (uint8Array: Uint8Array) => {
+	return Buffer.from(uint8Array).toString('base64')
+}
+
 export const createSetHeader = () => ({
 	alg: 'RS256',
 })
@@ -18,6 +24,8 @@ export const createSetPayload = (jti: string) => ({
 			},
 	},
 })
+
+export const createJoseHeader = () => ({ alg: 'RSA-OAEP', enc: 'A256GCM' })
 
 export const createEncodedPartialTokenComponents = (n: number) => {
 	const arrayOfPartialTokenComponents = [] as TokenComponents[]
@@ -41,15 +49,8 @@ export const toBase64Url = (data: any) => {
 	return Buffer.from(data).toString('base64url')
 }
 
-export type TokenComponents = {
-	header: string
-	payload: string
-	signature: string
-}
-
-export type SetWrapper = {
-	sets: {
-		[key: string]: string
-	}
-	moreAvailable: boolean
+export const serialiseJWESections = (sections: Buffer[]) => {
+	return sections
+		.map((section) => Buffer.from(section).toString('base64url'))
+		.join('.')
 }

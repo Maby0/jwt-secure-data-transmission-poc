@@ -1,5 +1,6 @@
+import { SetWrapper } from '../shared/types'
+import { createEncodedPartialTokenComponents } from '../shared/utils'
 import { generateTokenSignatureWithKms } from './generateTokenSignatureWithKms'
-import { createEncodedPartialTokenComponents, SetWrapper } from './util'
 
 export const createSetUsingKms = async (numberOfSets: number) => {
 	const setListObject = {

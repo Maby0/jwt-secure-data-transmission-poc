@@ -23,7 +23,7 @@ const signDataWithKms = async (dataBuffer: Buffer) => {
 	})
 
 	const command = new SignCommand({
-		KeyId: 'arn:aws:kms:eu-west-2:725018305812:key/b1b6ad0b-33dd-4525-8450-cd6b5fede947',
+		KeyId: process.env['SET_SIGNING_KMS_KEY_ARN'],
 		Message: dataBuffer,
 		MessageType: 'RAW',
 		SigningAlgorithm: 'RSASSA_PKCS1_V1_5_SHA_256',

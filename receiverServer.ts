@@ -3,8 +3,9 @@ import express, { Request, Response } from 'express'
 import { createJwkFromRawPublicKey } from './keys/generateJWKSObject'
 import { getKmsPublicKey } from './keys/getKmsPublicKey'
 
+const port = 4000
 const app = express()
-app.use(express.json())
+app.use(express.text())
 
 app.get('/getPublicKeyAsJwk', async (req: Request, res: Response) => {
 	const rawPublicKey = await getKmsPublicKey(
@@ -26,4 +27,4 @@ app.post(
 	}
 )
 
-app.listen(4000)
+app.listen(port, () => console.log('Port listening on: ', port))
