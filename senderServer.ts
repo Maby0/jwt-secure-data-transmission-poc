@@ -3,14 +3,15 @@ import express, { Request, Response } from 'express'
 import { createJwkFromRawPublicKey } from './keys/generateJWKSObject'
 import { getKmsPublicKey } from './keys/getKmsPublicKey'
 import fetch from 'node-fetch'
-import { createSetUsingKms } from './createJWS/createSetUsingKms'
+import { createSetUsingKms } from './createSET/createSetUsingKms'
 import { buildJWE } from './createJWE/buildJWE'
 
 const port = 3000
 const app = express()
 app.use(express.json())
+app.use(express.text())
 
-app.get('/getPublicKeyAsJwk', async (req: Request, res: Response) => {
+app.get('/getPublicKeyAsJwkFromAWS', async (req: Request, res: Response) => {
 	const rawPublicKey = await getKmsPublicKey(
 		process.env['SET_SIGNING_KMS_KEY_ARN'] ?? ''
 	)
@@ -27,6 +28,7 @@ app.listen(port, () => console.log('Port listening on: ', port))
 
 setInterval(async () => {
 	const setToSend = await createSetUsingKms(1)
+	console.log(setToSend)
 	const data = await buildJWE(setToSend)
 	const options = {
 		method: 'POST',
@@ -34,5 +36,9 @@ setInterval(async () => {
 	}
 	console.log(options)
 
-	await fetch('http://localhost:4000/relyingPartyReceiverEndpoint', options)
-}, 5000)
+	const response = await fetch(
+		'http://localhost:4000/relyingPartyReceiverEndpoint',
+		options
+	)
+	console.log(await response.text())
+}, 10000)

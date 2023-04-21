@@ -10,3 +10,12 @@ export type SetWrapper = {
 	}
 	moreAvailable: boolean
 }
+
+export interface JWESections {
+	joseHeader: string
+	encryptedCek: string
+	decryptedCek?: Uint8Array
+	iv: string
+	cipherText: string
+	authTag: string
+}

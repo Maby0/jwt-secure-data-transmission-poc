@@ -32,18 +32,20 @@ const createJoseHeaderBuffer = () => {
 
 const encryptDataIntoCipherText = (cipher: crypto.CipherGCM, data: unknown) => {
 	if (typeof data !== 'string') data = JSON.stringify(data)
-	return Buffer.concat([cipher.update(data as string), cipher.final()])
+	return Buffer.concat([
+		cipher.update(data as string, 'utf8'),
+		cipher.final(),
+	])
 }
 
 const encryptCekWithRPPublicKey = async (cek: Buffer) => {
-	const rpPublicKey = await getRPPublicKeyAsKeyObject()
-	return Buffer.from(
-		crypto.publicEncrypt(
-			{
-				key: rpPublicKey,
-				padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-			},
-			cek
-		)
+	const rpPublicKey = await getRPPublicKeyAsKeyObject(4000)
+	return crypto.publicEncrypt(
+		{
+			key: rpPublicKey,
+			padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+			oaepHash: 'sha256',
+		},
+		cek
 	)
 }

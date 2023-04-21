@@ -1,13 +1,16 @@
 require('dotenv').config()
+import { createPublicKey } from 'crypto'
 import express, { Request, Response } from 'express'
 import { createJwkFromRawPublicKey } from './keys/generateJWKSObject'
 import { getKmsPublicKey } from './keys/getKmsPublicKey'
+import { extractDataFromJWE } from './parseJWE/extractDataFromJWE'
+import { verifySETList } from './parseJWE/verifySET'
 
 const port = 4000
 const app = express()
 app.use(express.text())
 
-app.get('/getPublicKeyAsJwk', async (req: Request, res: Response) => {
+app.get('/getPublicKeyAsJwkFromAWS', async (req: Request, res: Response) => {
 	const rawPublicKey = await getKmsPublicKey(
 		process.env['KEY_ENCRYPTION_KEY'] ?? ''
 	)
@@ -20,10 +23,24 @@ app.get('/getPublicKeyAsJwk', async (req: Request, res: Response) => {
 	})
 })
 
+app.get('/getPublicKeyAsJwk', async (req: Request, res: Response) => {
+	const publicKey = process.env['PUBLIC_KEY'] ?? ''
+	const jwk = createPublicKey(publicKey).export({ format: 'jwk' })
+
+	res.json({
+		keys: [jwk],
+	})
+})
+
 app.post(
 	'/relyingPartyReceiverEndpoint',
 	async (req: Request, res: Response) => {
-		console.log(req.body)
+		const jwe = req.body
+		const nestedJws = await extractDataFromJWE(jwe)
+		await verifySETList(nestedJws)
+		console.log('All SETs verified')
+
+		res.send('JWE Received')
 	}
 )
 
