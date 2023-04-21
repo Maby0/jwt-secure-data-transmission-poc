@@ -4,9 +4,7 @@ export const uint8ArrayToBase64 = (uint8Array: Uint8Array) => {
 	return Buffer.from(uint8Array).toString('base64')
 }
 
-export const createSetHeader = () => ({
-	alg: 'RS256',
-})
+export const createSetHeader = () => ({ alg: 'RS256' })
 
 export const createSetPayload = (jti: string) => ({
 	iss: 'https://issuer.digitalIdentity.gov/',

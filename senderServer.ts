@@ -30,15 +30,17 @@ setInterval(async () => {
 	const setToSend = await createSetUsingKms(1)
 	console.log(setToSend)
 	const data = await buildJWE(setToSend)
+
 	const options = {
 		method: 'POST',
 		body: data,
 	}
-	console.log(options)
 
+	console.log(options)
+	console.log('Sending JWE')
 	const response = await fetch(
 		'http://localhost:4000/relyingPartyReceiverEndpoint',
 		options
 	)
-	console.log(await response.text())
+	console.log('Response from server: ', await response.text())
 }, 10000)
