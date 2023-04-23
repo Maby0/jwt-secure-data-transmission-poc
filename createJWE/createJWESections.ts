@@ -1,5 +1,5 @@
 import crypto from 'crypto'
-import { getRPPublicKeyAsKeyObject } from '../keys/getRPPublicKey'
+import { getPublicKeyAsKeyObject } from '../keys/getRPPublicKey'
 import { createJoseHeader } from '../shared/utils'
 import { SetWrapper } from '../shared/types'
 
@@ -39,7 +39,7 @@ const encryptDataIntoCipherText = (cipher: crypto.CipherGCM, data: unknown) => {
 }
 
 const encryptCekWithRPPublicKey = async (cek: Buffer) => {
-	const rpPublicKey = await getRPPublicKeyAsKeyObject(4000)
+	const rpPublicKey = await getPublicKeyAsKeyObject(4000)
 	return crypto.publicEncrypt(
 		{
 			key: rpPublicKey,

@@ -37,7 +37,7 @@ setInterval(async () => {
 	}
 
 	console.log(options)
-	console.log('Sending JWE')
+	console.log('Sending JWE to /relyingPartyReceiverEndpoint')
 	const response = await fetch(
 		'http://localhost:4000/relyingPartyReceiverEndpoint',
 		options

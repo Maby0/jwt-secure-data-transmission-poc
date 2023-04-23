@@ -1,10 +1,10 @@
 import crypto from 'crypto'
 import util from 'util'
-import { getRPPublicKeyAsKeyObject } from '../keys/getRPPublicKey'
+import { getPublicKeyAsKeyObject } from '../keys/getRPPublicKey'
 import { SetWrapper } from '../shared/types'
 
 export const verifySETList = async (setWrapper: SetWrapper) => {
-	const verificationKey = await getRPPublicKeyAsKeyObject(3000)
+	const verificationKey = await getPublicKeyAsKeyObject(3000)
 	const listOfBase64UrlSETs = Object.values(setWrapper.sets)
 	listOfBase64UrlSETs.forEach((set) => {
 		verifySET(set, verificationKey)
