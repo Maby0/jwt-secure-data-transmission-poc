@@ -13,7 +13,7 @@ app.get('/getPublicKeyAsJwkFromAWS', async (req: Request, res: Response) => {
 	const rawPublicKey = await getKmsPublicKey(
 		process.env['KEY_ENCRYPTION_KEY'] ?? ''
 	)
-	if (!rawPublicKey) throw Error('Could not find SET signing KMS key')
+	if (!rawPublicKey) throw Error('Could not find Key Encryption KMS Key')
 
 	const jwk = createJwkFromRawPublicKey(rawPublicKey)
 
@@ -28,9 +28,9 @@ app.post(
 		const jwe = req.body
 		const nestedJws = await extractDataFromJWE(jwe)
 		await verifyJWSList(nestedJws)
-		console.log('All SETs verified')
+		console.log('All JWSs verified')
 
-		res.send('JWE Received and nested SETs verified')
+		res.send('JWE received and nested JWSs verified')
 	}
 )
 

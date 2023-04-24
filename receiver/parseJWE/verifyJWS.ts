@@ -1,18 +1,18 @@
 import crypto from 'crypto'
 import util from 'util'
-import { SetWrapper } from '../../shared/types'
+import { JWSWrapper } from '../../shared/types'
 import { getPublicKeyFromSender } from '../getPublicKeyFromSender'
 
-export const verifyJWSList = async (setWrapper: SetWrapper) => {
+export const verifyJWSList = async (jwsWrapper: JWSWrapper) => {
 	const verificationKey = await getPublicKeyFromSender()
-	const listOfBase64UrlSETs = Object.values(setWrapper.sets)
-	listOfBase64UrlSETs.forEach((set) => {
-		verifyJWS(set, verificationKey)
+	const base64UrlJWSList = Object.values(jwsWrapper.jwsList)
+	base64UrlJWSList.forEach((jws) => {
+		verifyJWS(jws, verificationKey)
 	})
 }
 
-const verifyJWS = (set: string, jwk: crypto.KeyObject) => {
-	const [header, payload, signature] = set.split('.')
+const verifyJWS = (jws: string, jwk: crypto.KeyObject) => {
+	const [header, payload, signature] = jws.split('.')
 	const decodedHeader = Buffer.from(header, 'base64url').toString('utf8')
 	const decodedPayload = Buffer.from(payload, 'base64url').toString('utf8')
 	const parsedHeader = JSON.parse(decodedHeader)
@@ -29,5 +29,5 @@ const verifyJWS = (set: string, jwk: crypto.KeyObject) => {
 	console.log(parsedHeader)
 	console.log(util.inspect(parsedPayload, { depth: null }))
 
-	if (!isVerified) throw Error('Previous logged SET not verified')
+	if (!isVerified) throw Error('Previous logged JWS not verified')
 }

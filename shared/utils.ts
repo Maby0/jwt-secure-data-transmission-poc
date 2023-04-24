@@ -4,9 +4,9 @@ export const uint8ArrayToBase64 = (uint8Array: Uint8Array) => {
 	return Buffer.from(uint8Array).toString('base64')
 }
 
-export const createSetHeader = () => ({ alg: 'RS256', typ: 'secevent+jwt' })
+export const createJWSHeader = () => ({ alg: 'RS256', typ: 'secevent+jwt' })
 
-export const createSetPayload = (jti: string) => ({
+export const createJWSPayload = (jti: string) => ({
 	iss: 'https://issuer.digitalIdentity.gov/',
 	jti: Buffer.from(jti, 'ascii').toString('hex'),
 	iat: 1520364019,
@@ -29,12 +29,12 @@ export const createEncodedPartialTokenComponents = (n: number) => {
 	const arrayOfPartialTokenComponents = [] as TokenComponents[]
 
 	for (let i = 0; i < n; i++) {
-		const setHeader = toBase64Url(createSetHeader())
-		const setPayload = toBase64Url(createSetPayload(`uniqueIdentifier${i}`))
+		const jwsHeader = toBase64Url(createJWSHeader())
+		const jwsPayload = toBase64Url(createJWSPayload(`uniqueIdentifier${i}`))
 
 		const encodedTokenComponents = {
-			header: setHeader,
-			payload: setPayload,
+			header: jwsHeader,
+			payload: jwsPayload,
 		} as TokenComponents
 
 		arrayOfPartialTokenComponents.push(encodedTokenComponents)

@@ -15,7 +15,7 @@ app.get('/getPublicKeyAsJwkFromAWS', async (req: Request, res: Response) => {
 	const rawPublicKey = await getKmsPublicKey(
 		process.env['JWS_SIGNING_KMS_KEY_ARN'] ?? ''
 	)
-	if (!rawPublicKey) throw Error('Could not find SET signing KMS key')
+	if (!rawPublicKey) throw Error('Could not find JWS signing KMS key')
 
 	const jwk = createJwkFromRawPublicKey(rawPublicKey)
 
@@ -27,9 +27,9 @@ app.get('/getPublicKeyAsJwkFromAWS', async (req: Request, res: Response) => {
 app.listen(port, () => console.log('Port listening on: ', port))
 
 setInterval(async () => {
-	const setToSend = await createJWSUsingKms(1)
-	console.log(setToSend)
-	const data = await buildJWE(setToSend)
+	const jwsToSend = await createJWSUsingKms(1)
+	console.log(jwsToSend)
+	const data = await buildJWE(jwsToSend)
 
 	const options = {
 		method: 'POST',

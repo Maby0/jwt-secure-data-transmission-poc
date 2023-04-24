@@ -1,22 +1,22 @@
-import { SetWrapper } from '../../shared/types'
+import { JWSWrapper } from '../../shared/types'
 import { createEncodedPartialTokenComponents } from '../../shared/utils'
 import { generateTokenSignatureWithKms } from './generateTokenSignatureWithKms'
 
-export const createJWSUsingKms = async (numberOfSets: number) => {
-	const setListObject = {
-		sets: {},
+export const createJWSUsingKms = async (numberOfJWSToCreate: number) => {
+	const jwsWrapper = {
+		jwsList: {},
 		moreAvailable: false,
-	} as SetWrapper
+	} as JWSWrapper
 
 	const arrayOfPartialTokenComponents =
-		createEncodedPartialTokenComponents(numberOfSets)
+		createEncodedPartialTokenComponents(numberOfJWSToCreate)
 
 	await Promise.all(
 		arrayOfPartialTokenComponents.map(async (encodedTokenComponents, i) => {
 			encodedTokenComponents.signature =
 				await generateTokenSignatureWithKms(encodedTokenComponents)
 
-			setListObject.sets[`sqsMessageId${i}`] =
+			jwsWrapper.jwsList[`sqsMessageId${i}`] =
 				encodedTokenComponents.header +
 				'.' +
 				encodedTokenComponents.payload +
@@ -25,5 +25,5 @@ export const createJWSUsingKms = async (numberOfSets: number) => {
 		})
 	)
 
-	return setListObject
+	return jwsWrapper
 }

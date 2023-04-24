@@ -1,5 +1,5 @@
 import { getPublicKeyFromEndpoint } from '../shared/keys/getPublicKeyFromEndpoint'
 
-export const getPublicKeyFromRelyingParty = async () => {
+export const getPublicKeyFromReceiver = async () => {
 	return getPublicKeyFromEndpoint(4000)
 }

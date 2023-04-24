@@ -4,8 +4,8 @@ export type TokenComponents = {
 	signature: string
 }
 
-export type SetWrapper = {
-	sets: {
+export type JWSWrapper = {
+	jwsList: {
 		[key: string]: string
 	}
 	moreAvailable: boolean
