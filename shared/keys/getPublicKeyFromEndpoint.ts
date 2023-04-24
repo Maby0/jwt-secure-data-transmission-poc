@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 import crypto from 'crypto'
 
-export const getPublicKeyAsKeyObject = async (port: number) => {
+export const getPublicKeyFromEndpoint = async (port: number) => {
 	const getKeysResponse = await fetch(
 		`http://localhost:${port}/getPublicKeyAsJwkFromAWS`
 	)

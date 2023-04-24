@@ -1,4 +1,4 @@
-import { TokenComponents } from './types'
+import { JWESections, TokenComponents } from './types'
 
 export const uint8ArrayToBase64 = (uint8Array: Uint8Array) => {
 	return Buffer.from(uint8Array).toString('base64')
@@ -51,4 +51,15 @@ export const serialiseJWESections = (sections: Buffer[]) => {
 	return sections
 		.map((section) => Buffer.from(section).toString('base64url'))
 		.join('.')
+}
+
+export const splitJWESections = (jweAsString: string): JWESections => {
+	const jweSectionList = jweAsString.split('.')
+	return {
+		joseHeader: jweSectionList[0],
+		encryptedCek: jweSectionList[1],
+		iv: jweSectionList[2],
+		cipherText: jweSectionList[3],
+		authTag: jweSectionList[4],
+	}
 }

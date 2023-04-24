@@ -1,4 +1,3 @@
-require('dotenv').config()
 import { GetPublicKeyCommand, KMSClient } from '@aws-sdk/client-kms'
 
 export const getKmsPublicKey = async (keyArn: string) => {

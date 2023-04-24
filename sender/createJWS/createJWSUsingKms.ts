@@ -1,8 +1,8 @@
-import { SetWrapper } from '../shared/types'
-import { createEncodedPartialTokenComponents } from '../shared/utils'
+import { SetWrapper } from '../../shared/types'
+import { createEncodedPartialTokenComponents } from '../../shared/utils'
 import { generateTokenSignatureWithKms } from './generateTokenSignatureWithKms'
 
-export const createSetUsingKms = async (numberOfSets: number) => {
+export const createJWSUsingKms = async (numberOfSets: number) => {
 	const setListObject = {
 		sets: {},
 		moreAvailable: false,

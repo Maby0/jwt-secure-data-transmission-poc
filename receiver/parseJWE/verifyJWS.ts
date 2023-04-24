@@ -1,17 +1,17 @@
 import crypto from 'crypto'
 import util from 'util'
-import { getPublicKeyAsKeyObject } from '../keys/getRPPublicKey'
-import { SetWrapper } from '../shared/types'
+import { SetWrapper } from '../../shared/types'
+import { getPublicKeyFromSender } from '../getPublicKeyFromSender'
 
-export const verifySETList = async (setWrapper: SetWrapper) => {
-	const verificationKey = await getPublicKeyAsKeyObject(3000)
+export const verifyJWSList = async (setWrapper: SetWrapper) => {
+	const verificationKey = await getPublicKeyFromSender()
 	const listOfBase64UrlSETs = Object.values(setWrapper.sets)
 	listOfBase64UrlSETs.forEach((set) => {
-		verifySET(set, verificationKey)
+		verifyJWS(set, verificationKey)
 	})
 }
 
-const verifySET = (set: string, jwk: crypto.KeyObject) => {
+const verifyJWS = (set: string, jwk: crypto.KeyObject) => {
 	const [header, payload, signature] = set.split('.')
 	const decodedHeader = Buffer.from(header, 'base64url').toString('utf8')
 	const decodedPayload = Buffer.from(payload, 'base64url').toString('utf8')

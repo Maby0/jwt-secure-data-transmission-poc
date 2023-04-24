@@ -4,11 +4,12 @@ import {
 	DecryptCommandInput,
 	KMSClient,
 } from '@aws-sdk/client-kms'
-import { JWESections } from '../shared/types'
+import { JWESections } from '../../shared/types'
+import { splitJWESections } from '../../shared/utils'
 
 export const extractDataFromJWE = async (jweAsString: string) => {
 	const jweSections = splitJWESections(jweAsString)
-	jweSections.decryptedCek = (await decryptCek(
+	jweSections.decryptedCek = (await decryptCEK(
 		jweSections.encryptedCek
 	)) as Uint8Array
 	const decryptedData = decryptAndVerifyData(jweSections)
@@ -17,18 +18,7 @@ export const extractDataFromJWE = async (jweAsString: string) => {
 	return JSON.parse(stringifiedData)
 }
 
-const splitJWESections = (jweAsString: string): JWESections => {
-	const jweSectionList = jweAsString.split('.')
-	return {
-		joseHeader: jweSectionList[0],
-		encryptedCek: jweSectionList[1],
-		iv: jweSectionList[2],
-		cipherText: jweSectionList[3],
-		authTag: jweSectionList[4],
-	}
-}
-
-const decryptCek = async (encryptedCek: string) => {
+const decryptCEK = async (encryptedCek: string) => {
 	const client = new KMSClient({ region: process.env['AWS_REGION'] })
 	const input: DecryptCommandInput = {
 		CiphertextBlob: Buffer.from(encryptedCek, 'base64url'),

@@ -1,9 +1,9 @@
 require('dotenv').config()
 import express, { Request, Response } from 'express'
-import { createJwkFromRawPublicKey } from './keys/generateJWKSObject'
-import { getKmsPublicKey } from './keys/getKmsPublicKey'
-import { extractDataFromJWE } from './parseJWE/extractDataFromJWE'
-import { verifySETList } from './parseJWE/verifySET'
+import { extractDataFromJWE } from './receiver/parseJWE/extractDataFromJWE'
+import { verifyJWSList } from './receiver/parseJWE/verifyJWS'
+import { createJwkFromRawPublicKey } from './shared/keys/generateJWKSObject'
+import { getKmsPublicKey } from './shared/keys/getKmsPublicKey'
 
 const port = 4000
 const app = express()
@@ -27,7 +27,7 @@ app.post(
 	async (req: Request, res: Response) => {
 		const jwe = req.body
 		const nestedJws = await extractDataFromJWE(jwe)
-		await verifySETList(nestedJws)
+		await verifyJWSList(nestedJws)
 		console.log('All SETs verified')
 
 		res.send('JWE Received and nested SETs verified')

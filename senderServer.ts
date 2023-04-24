@@ -1,10 +1,10 @@
 require('dotenv').config()
 import express, { Request, Response } from 'express'
-import { createJwkFromRawPublicKey } from './keys/generateJWKSObject'
-import { getKmsPublicKey } from './keys/getKmsPublicKey'
 import fetch from 'node-fetch'
-import { createSetUsingKms } from './createSET/createSetUsingKms'
-import { buildJWE } from './createJWE/buildJWE'
+import { createJWSUsingKms } from './sender/createJWS/createJWSUsingKms'
+import { buildJWE } from './sender/createJWE/buildJWE'
+import { createJwkFromRawPublicKey } from './shared/keys/generateJWKSObject'
+import { getKmsPublicKey } from './shared/keys/getKmsPublicKey'
 
 const port = 3000
 const app = express()
@@ -13,7 +13,7 @@ app.use(express.text())
 
 app.get('/getPublicKeyAsJwkFromAWS', async (req: Request, res: Response) => {
 	const rawPublicKey = await getKmsPublicKey(
-		process.env['SET_SIGNING_KMS_KEY_ARN'] ?? ''
+		process.env['JWS_SIGNING_KMS_KEY_ARN'] ?? ''
 	)
 	if (!rawPublicKey) throw Error('Could not find SET signing KMS key')
 
@@ -27,7 +27,7 @@ app.get('/getPublicKeyAsJwkFromAWS', async (req: Request, res: Response) => {
 app.listen(port, () => console.log('Port listening on: ', port))
 
 setInterval(async () => {
-	const setToSend = await createSetUsingKms(1)
+	const setToSend = await createJWSUsingKms(1)
 	console.log(setToSend)
 	const data = await buildJWE(setToSend)
 

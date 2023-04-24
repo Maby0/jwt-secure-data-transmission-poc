@@ -1,13 +1,13 @@
 import crypto from 'crypto'
-import { getPublicKeyAsKeyObject } from '../keys/getRPPublicKey'
-import { createJoseHeader } from '../shared/utils'
-import { SetWrapper } from '../shared/types'
+import { createJoseHeader } from '../../shared/utils'
+import { SetWrapper } from '../../shared/types'
+import { getPublicKeyFromRelyingParty } from '../getPublicKeyFromReceiver'
 
 export const createJWESections = async (dataToSend: SetWrapper) => {
 	const cipherCollection = createCipherCollection()
 
 	const joseHeader = createJoseHeaderBuffer()
-	const encryptedCek = await encryptCekWithRPPublicKey(cipherCollection.cek)
+	const encryptedCek = await encryptCEKWithRPPublicKey(cipherCollection.cek)
 	const cipherText = encryptDataIntoCipherText(
 		cipherCollection.cipher,
 		dataToSend
@@ -38,8 +38,8 @@ const encryptDataIntoCipherText = (cipher: crypto.CipherGCM, data: unknown) => {
 	])
 }
 
-const encryptCekWithRPPublicKey = async (cek: Buffer) => {
-	const rpPublicKey = await getPublicKeyAsKeyObject(4000)
+const encryptCEKWithRPPublicKey = async (cek: Buffer) => {
+	const rpPublicKey = await getPublicKeyFromRelyingParty()
 	return crypto.publicEncrypt(
 		{
 			key: rpPublicKey,
