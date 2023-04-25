@@ -1,8 +1,8 @@
-import { JWSWrapper } from '../../shared/types'
-import { createEncodedPartialTokenComponents } from '../../shared/utils'
+import { JWSWrapper } from '../../../shared/types'
+import { createEncodedPartialTokenComponents } from '../../../shared/utils'
 import { generateTokenSignatureWithKms } from './generateTokenSignatureWithKms'
 
-export const createJWSUsingKms = async (numberOfJWSToCreate: number) => {
+export const createJWSConcat = async (numberOfJWSToCreate: number) => {
 	const jwsWrapper = {
 		jwsList: {},
 		moreAvailable: false,

@@ -1,4 +1,4 @@
-import { signDataWithKms } from '../../shared/keys/kms/signDataWithKms'
+import { signDataWithKms } from '../../../shared/keys/kms/signDataWithKms'
 
 export const generateTokenSignatureWithKms = async (encodedTokenComponents: {
 	header: string

@@ -1,7 +1,7 @@
 import crypto from 'crypto'
-import { JWESections } from '../../shared/types'
-import { splitJWESections } from '../../shared/utils'
-import { decryptCEKWithKMS } from '../../shared/keys/kms/decryptCEKWithKMS'
+import { JWESections } from '../../../shared/types'
+import { splitJWESections } from '../../../shared/utils'
+import { decryptCEKWithKMS } from '../../../shared/keys/kms/decryptCEKWithKMS'
 
 export const extractDataFromJWE = async (jweAsString: string) => {
 	const jweSections = splitJWESections(jweAsString)

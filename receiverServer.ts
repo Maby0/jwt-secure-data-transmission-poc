@@ -1,9 +1,8 @@
 require('dotenv').config()
 import express, { Request, Response } from 'express'
-import { extractDataFromJWE } from './receiver/parseJWE/extractDataFromJWE'
-import { verifyJWSList } from './receiver/parseJWE/verifyJWS'
 import { createJwkFromRawPublicKey } from './shared/keys/generateJWKSObject'
 import { getKmsPublicKey } from './shared/keys/kms/getKmsPublicKey'
+import { parseAndVerifyData } from './receiver/parseAndVerifyData/parseAndVerifyData'
 
 const port = 4000
 const app = express()
@@ -26,8 +25,7 @@ app.post(
 	'/relyingPartyReceiverEndpoint',
 	async (req: Request, res: Response) => {
 		const jwe = req.body
-		const nestedJws = await extractDataFromJWE(jwe)
-		await verifyJWSList(nestedJws)
+		await parseAndVerifyData(jwe)
 		console.log('All JWSs verified')
 
 		res.send('JWE received and nested JWSs verified')

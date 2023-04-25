@@ -1,10 +1,10 @@
 require('dotenv').config()
 import express, { Request, Response } from 'express'
 import fetch from 'node-fetch'
-import { createJWSUsingKms } from './sender/createJWS/createJWSUsingKms'
-import { buildJWE } from './sender/createJWE/buildJWE'
 import { createJwkFromRawPublicKey } from './shared/keys/generateJWKSObject'
 import { getKmsPublicKey } from './shared/keys/kms/getKmsPublicKey'
+import { createJWS } from './sender/createJWS'
+import { createJWE } from './sender/createJWE'
 
 const port = 3000
 const app = express()
@@ -27,9 +27,9 @@ app.get('/getPublicKeyAsJwkFromAWS', async (req: Request, res: Response) => {
 app.listen(port, () => console.log('Port listening on: ', port))
 
 setInterval(async () => {
-	const jwsToSend = await createJWSUsingKms(1)
+	const jwsToSend = await createJWS()
 	console.log(jwsToSend)
-	const data = await buildJWE(jwsToSend)
+	const data = await createJWE(jwsToSend)
 
 	const options = {
 		method: 'POST',

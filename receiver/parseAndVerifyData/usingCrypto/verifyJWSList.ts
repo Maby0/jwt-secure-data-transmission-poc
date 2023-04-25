@@ -1,7 +1,7 @@
 import crypto from 'crypto'
 import util from 'util'
-import { JWSWrapper } from '../../shared/types'
-import { getPublicKeyFromSender } from '../getPublicKeyFromSender'
+import { JWSWrapper } from '../../../shared/types'
+import { getPublicKeyFromSender } from '../../getPublicKeyFromSender'
 
 export const verifyJWSList = async (jwsWrapper: JWSWrapper) => {
 	const verificationKey = await getPublicKeyFromSender()

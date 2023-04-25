@@ -1,7 +1,7 @@
 import crypto from 'crypto'
-import { createJoseHeader } from '../../shared/utils'
-import { JWSWrapper } from '../../shared/types'
-import { getPublicKeyFromReceiver } from '../getPublicKeyFromReceiver'
+import { createJoseHeader } from '../../../shared/utils'
+import { JWSWrapper } from '../../../shared/types'
+import { getPublicKeyFromReceiver } from '../../getPublicKeyFromReceiver'
 
 export const createJWESections = async (dataToSend: JWSWrapper) => {
 	const cipherCollection = createCipherCollection()
