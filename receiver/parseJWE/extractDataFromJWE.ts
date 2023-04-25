@@ -23,7 +23,7 @@ const decryptCEK = async (encryptedCek: string) => {
 	const input: DecryptCommandInput = {
 		CiphertextBlob: Buffer.from(encryptedCek, 'base64url'),
 		EncryptionAlgorithm: 'RSAES_OAEP_SHA_256',
-		KeyId: process.env['KEY_ENCRYPTION_KEY'],
+		KeyId: process.env['KEY_ENCRYPTION_KEY_ARN'],
 	}
 	const decryptCommand = new DecryptCommand(input)
 	const result = await client.send(decryptCommand)

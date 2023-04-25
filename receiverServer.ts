@@ -11,7 +11,7 @@ app.use(express.text())
 
 app.get('/getPublicKeyAsJwkFromAWS', async (req: Request, res: Response) => {
 	const rawPublicKey = await getKmsPublicKey(
-		process.env['KEY_ENCRYPTION_KEY'] ?? ''
+		process.env['KEY_ENCRYPTION_KEY_ARN'] ?? ''
 	)
 	if (!rawPublicKey) throw Error('Could not find Key Encryption KMS Key')
 
