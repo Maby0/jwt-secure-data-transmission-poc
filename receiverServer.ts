@@ -3,7 +3,7 @@ import express, { Request, Response } from 'express'
 import { extractDataFromJWE } from './receiver/parseJWE/extractDataFromJWE'
 import { verifyJWSList } from './receiver/parseJWE/verifyJWS'
 import { createJwkFromRawPublicKey } from './shared/keys/generateJWKSObject'
-import { getKmsPublicKey } from './shared/keys/getKmsPublicKey'
+import { getKmsPublicKey } from './shared/keys/kms/getKmsPublicKey'
 
 const port = 4000
 const app = express()

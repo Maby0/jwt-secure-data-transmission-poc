@@ -1,36 +1,17 @@
 import crypto from 'crypto'
-import {
-	DecryptCommand,
-	DecryptCommandInput,
-	KMSClient,
-} from '@aws-sdk/client-kms'
 import { JWESections } from '../../shared/types'
 import { splitJWESections } from '../../shared/utils'
+import { decryptCEKWithKMS } from '../../shared/keys/kms/decryptCEKWithKMS'
 
 export const extractDataFromJWE = async (jweAsString: string) => {
 	const jweSections = splitJWESections(jweAsString)
-	jweSections.decryptedCek = (await decryptCEK(
+	jweSections.decryptedCek = (await decryptCEKWithKMS(
 		jweSections.encryptedCek
 	)) as Uint8Array
 	const decryptedData = decryptAndVerifyData(jweSections)
 
 	const stringifiedData = Buffer.from(decryptedData).toString('utf8')
 	return JSON.parse(stringifiedData)
-}
-
-const decryptCEK = async (encryptedCek: string) => {
-	const client = new KMSClient({ region: process.env['AWS_REGION'] })
-	const input: DecryptCommandInput = {
-		CiphertextBlob: Buffer.from(encryptedCek, 'base64url'),
-		EncryptionAlgorithm: 'RSAES_OAEP_SHA_256',
-		KeyId: process.env['KEY_ENCRYPTION_KEY_ARN'],
-	}
-	const decryptCommand = new DecryptCommand(input)
-	const result = await client.send(decryptCommand)
-
-	if (!result.Plaintext) throw Error('Empty Plaintext property returned')
-
-	return result.Plaintext
 }
 
 const decryptAndVerifyData = (jweSections: JWESections) => {

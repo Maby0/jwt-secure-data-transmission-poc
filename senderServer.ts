@@ -4,7 +4,7 @@ import fetch from 'node-fetch'
 import { createJWSUsingKms } from './sender/createJWS/createJWSUsingKms'
 import { buildJWE } from './sender/createJWE/buildJWE'
 import { createJwkFromRawPublicKey } from './shared/keys/generateJWKSObject'
-import { getKmsPublicKey } from './shared/keys/getKmsPublicKey'
+import { getKmsPublicKey } from './shared/keys/kms/getKmsPublicKey'
 
 const port = 3000
 const app = express()
