@@ -7,17 +7,17 @@ export const uint8ArrayToBase64 = (uint8Array: Uint8Array) => {
 export const createJWSHeader = () => ({ alg: 'RS256', typ: 'secevent+jwt' })
 
 export const createJWSPayload = (jti: string) => ({
-	iss: 'https://issuer.digitalIdentity.gov/',
+	iss: 'https://issuer.testissuer.com/',
 	jti: Buffer.from(jti, 'ascii').toString('hex'),
 	iat: 1520364019,
-	aud: 'https://audience.hmrc.gov/',
+	aud: 'https://audience.test.com/',
 	events: {
-		'https://schemas.digitalIdentity.gov/secevent/risc/event-type/ipv-spot-request-recieved':
+		'https://schemas.testissuer.com/secevent/risc/event-type/test-security-event-received':
 			{
 				subject: {
 					format: 'iss_sub',
-					iss: 'https://issuer.digitalIdentity.gov/',
-					sub: 'aPairwiseId',
+					iss: 'https://issuer.testissuer.com/',
+					sub: 'anIndividualId',
 				},
 			},
 	},
